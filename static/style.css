@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #07111a;
+    --surface: #0d1a25;
+    --surface-light: #122534;
+    --border: rgba(150, 190, 210, 0.14);
+
+    --text: #eaf2f7;
+    --muted: #8fa4b3;
+
+    --cyan: #46d6c5;
+    --blue: #5e9cff;
+    --orange: #ffb45b;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(70, 214, 197, 0.10),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 85% 75%,
+            rgba(94, 156, 255, 0.10),
+            transparent 28%
+        ),
+
+        var(--bg);
+
+    color: var(--text);
+
+    font-family: "Manrope", sans-serif;
+}
+
+.landing-page {
+    width: min(1200px, 92%);
+    min-height: 100vh;
+
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ==============================
+   TOP BAR
+================================ */
+
+.top-bar {
+    padding: 28px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cyan),
+            var(--blue)
+        );
+
+    color: #061017;
+
+    font-weight: 800;
+}
+
+.brand h2 {
+    font-size: 20px;
+}
+
+.brand p {
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.status {
+    color: var(--cyan);
+
+    font-family: "DM Mono",
+        monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+}
+
+
+/* ==============================
+   HERO
+================================ */
+
+.hero {
+    flex: 1;
+
+    padding: 80px 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 720px;
+}
+
+.eyebrow {
+    color: var(--cyan);
+
+    font-family: "DM Mono",
+        monospace;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size:
+        clamp(42px, 6vw, 76px);
+
+    line-height: 1.05;
+
+    letter-spacing: -3px;
+}
+
+.hero-description {
+    max-width: 580px;
+
+    margin-top: 25px;
+
+    color: var(--muted);
+
+    font-size: 17px;
+
+    line-height: 1.8;
+}
+
+
+/* ==============================
+   PORTAL CARDS
+================================ */
+
+.portal-container {
+
+    margin-top: 70px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 24px;
+}
+
+.portal-card {
+
+    position: relative;
+
+    min-height: 300px;
+
+    padding: 34px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 37, 52, 0.95),
+            rgba(10, 23, 34, 0.95)
+        );
+
+    border:
+        1px solid var(--border);
+
+    text-decoration: none;
+
+    color: var(--text);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        border 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.portal-card:hover {
+
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(70, 214, 197, 0.55);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.35);
+}
+
+.portal-number {
+
+    position: absolute;
+
+    right: 30px;
+    top: 25px;
+
+    font-family:
+        "DM Mono",
+        monospace;
+
+    color:
+        rgba(255, 255, 255, 0.15);
+
+    font-size: 42px;
+}
+
+.portal-icon {
+
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    font-size: 28px;
+}
+
+.portal-card h2 {
+
+    margin-top: 28px;
+
+    font-size: 25px;
+}
+
+.portal-card p {
+
+    margin-top: 14px;
+
+    color: var(--muted);
+
+    line-height: 1.7;
+
+    max-width: 420px;
+}
+
+.portal-link {
+
+    position: absolute;
+
+    bottom: 30px;
+    left: 34px;
+
+    color: var(--cyan);
+
+    font-weight: 700;
+}
+
+
+/* STAFF DIFFERENCE */
+
+.staff-card .portal-link {
+    color: var(--blue);
+}
+
+.staff-card:hover {
+    border-color:
+        rgba(94, 156, 255, 0.55);
+}
+
+
+/* ==============================
+   FOOTER
+================================ */
+
+footer {
+
+    padding: 25px 0;
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    border-top:
+        1px solid var(--border);
+}
+
+footer span:first-child {
+    color: var(--text);
+}
+
+
+/* ==============================
+   MOBILE
+================================ */
+
+@media (max-width: 700px) {
+
+    .top-bar {
+        align-items:
+            flex-start;
+
+        gap: 20px;
+
+        flex-direction:
+            column;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .hero {
+        padding:
+            60px 0;
+    }
+
+    .portal-container {
+
+        grid-template-columns:
+            1fr;
+
+        margin-top:
+            50px;
+    }
+
+    footer {
+        flex-direction:
+            column;
+
+        gap: 8px;
+    }
+}

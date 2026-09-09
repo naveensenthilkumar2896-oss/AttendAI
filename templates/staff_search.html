@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Staff Portal | AttendAI</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+
+                radial-gradient(
+                    circle at top left,
+                    rgba(70,214,197,0.10),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(94,156,255,0.12),
+                    transparent 35%
+                ),
+
+                #08141d;
+
+            color: #eaf2f7;
+
+        }
+
+
+        /* =====================================
+           MAIN PORTAL CARD
+        ===================================== */
+
+        .portal-container {
+
+            width:
+                min(520px, 92%);
+
+            padding:
+                45px 35px;
+
+            background:
+                #10212d;
+
+            border:
+                1px solid #294353;
+
+            border-radius:
+                25px;
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,0.35);
+
+            text-align:
+                center;
+
+        }
+
+
+        /* =====================================
+           LOGO
+        ===================================== */
+
+        .logo {
+
+            font-size:
+                26px;
+
+            font-weight:
+                bold;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        .logo span {
+
+            color:
+                #46d6c5;
+
+        }
+
+
+        /* =====================================
+           ICON
+        ===================================== */
+
+        .portal-icon {
+
+            width:
+                75px;
+
+            height:
+                75px;
+
+            margin:
+                0 auto 25px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                34px;
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(70,214,197,0.10);
+
+            border:
+                1px solid
+                rgba(70,214,197,0.25);
+
+        }
+
+
+        /* =====================================
+           HEADINGS
+        ===================================== */
+
+        h1 {
+
+            margin:
+                0 0 15px;
+
+            font-size:
+                32px;
+
+        }
+
+
+        .description {
+
+            color:
+                #8fa4b3;
+
+            line-height:
+                1.7;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        /* =====================================
+           FORM
+        ===================================== */
+
+        form {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                15px;
+
+        }
+
+
+        label {
+
+            text-align:
+                left;
+
+            color:
+                #aab9c4;
+
+            font-size:
+                14px;
+
+            font-weight:
+                bold;
+
+        }
+
+
+        input {
+
+            width:
+                100%;
+
+            padding:
+                16px;
+
+            border-radius:
+                12px;
+
+            border:
+                1px solid #294353;
+
+            background:
+                #08141d;
+
+            color:
+                white;
+
+            font-size:
+                16px;
+
+            outline:
+                none;
+
+        }
+
+
+        input:focus {
+
+            border-color:
+                #46d6c5;
+
+        }
+
+
+        button {
+
+            padding:
+                16px;
+
+            border:
+                none;
+
+            border-radius:
+                12px;
+
+            background:
+                #46d6c5;
+
+            color:
+                #07111a;
+
+            font-size:
+                16px;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s;
+
+        }
+
+
+        button:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        /* =====================================
+           INFO BOX
+        ===================================== */
+
+        .info-box {
+
+            margin-top:
+                25px;
+
+            padding:
+                15px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            color:
+                #8fa4b3;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =====================================
+           HOME LINK
+        ===================================== */
+
+        .home-link {
+
+            display:
+                inline-block;
+
+            margin-top:
+                25px;
+
+            color:
+                #8fa4b3;
+
+            text-decoration:
+                none;
+
+            font-size:
+                14px;
+
+        }
+
+
+        .home-link:hover {
+
+            color:
+                #46d6c5;
+
+        }
+
+
+        /* =====================================
+           LOADING SCREEN
+        ===================================== */
+
+        .loading-overlay {
+
+            display:
+                none;
+
+            position:
+                fixed;
+
+            top:
+                0;
+
+            left:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            background:
+                rgba(8,20,29,0.97);
+
+            z-index:
+                999;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        .spinner {
+
+            width:
+                60px;
+
+            height:
+                60px;
+
+            border:
+                5px solid
+                rgba(255,255,255,0.12);
+
+            border-top:
+                5px solid #46d6c5;
+
+            border-radius:
+                50%;
+
+            animation:
+                spin 0.9s linear infinite;
+
+        }
+
+
+        .loading-logo {
+
+            margin-top:
+                25px;
+
+            font-size:
+                25px;
+
+            font-weight:
+                bold;
+
+        }
+
+
+        .loading-logo span {
+
+            color:
+                #46d6c5;
+
+        }
+
+
+        .loading-text {
+
+            margin-top:
+                12px;
+
+            color:
+                #8fa4b3;
+
+            font-size:
+                14px;
+
+        }
+
+
+        @keyframes spin {
+
+            from {
+
+                transform:
+                    rotate(0deg);
+
+            }
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        /* =====================================
+           MOBILE RESPONSIVE
+        ===================================== */
+
+        @media (max-width: 500px) {
+
+            .portal-container {
+
+                padding:
+                    40px 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     LOADING OVERLAY
+===================================== -->
+
+<div
+    class="loading-overlay"
+    id="loadingOverlay"
+>
+
+    <div class="spinner"></div>
+
+
+    <div class="loading-logo">
+
+        Attend<span>AI</span>
+
+    </div>
+
+
+    <div class="loading-text">
+
+        Loading class attendance analytics...
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================
+     STAFF PORTAL
+===================================== -->
+
+<div class="portal-container">
+
+
+    <div class="logo">
+
+        Attend<span>AI</span>
+
+    </div>
+
+
+    <div class="portal-icon">
+
+        👩‍🏫
+
+    </div>
+
+
+    <h1>
+
+        Staff Portal
+
+    </h1>
+
+
+    <p class="description">
+
+        Enter the class name to access the attendance
+        dashboard and view complete class-level
+        attendance analytics.
+
+    </p>
+
+
+    <form
+        action="/staff/dashboard"
+        method="GET"
+        onsubmit="showLoading()"
+    >
+
+
+        <label>
+
+            Class Name
+
+        </label>
+
+
+        <input
+
+            type="text"
+
+            name="class_name"
+
+            placeholder="Example: III CSE A"
+
+            required
+
+            autocomplete="off"
+
+        >
+
+
+        <button
+            type="submit"
+        >
+
+            Open Attendance Dashboard
+
+        </button>
+
+
+    </form>
+
+
+    <div class="info-box">
+
+        The dashboard provides attendance insights,
+        class statistics, attendance distribution and
+        complete student attendance information.
+
+    </div>
+
+
+    <a
+        href="/"
+        class="home-link"
+    >
+
+        ← Back to Home
+
+    </a>
+
+
+</div>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script>
+
+    function showLoading() {
+
+        document
+            .getElementById(
+                "loadingOverlay"
+            )
+            .style
+            .display =
+                "flex";
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Attendance - AttendAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #08141d;
+            color: #eaf2f7;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .search-card {
+            width: 100%;
+            max-width: 600px;
+            background: #10212d;
+            border: 1px solid #294353;
+            border-radius: 20px;
+            padding: 45px;
+            box-sizing: border-box;
+        }
+
+        .back {
+            color: #70d6d1;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #aab9c4;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 17px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            border: 1px solid #35505e;
+            background: #09141c;
+            color: white;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 17px;
+            border: none;
+            border-radius: 10px;
+            background: #39a9a3;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #4a2028;
+            color: #ff9aa7;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="search-card">
+
+            <a href="/" class="back">
+                ← Back to Home
+            </a>
+
+            <h1>Student Attendance</h1>
+
+            <p>
+                Enter your Register Number to view your complete
+                attendance information.
+            </p>
+
+            <form action="/student/result" method="POST">
+
+                <label for="register_no">
+                    Register Number
+                </label>
+
+                <input
+                    type="text"
+                    id="register_no"
+                    name="register_no"
+                    placeholder="Enter your Register Number"
+                    required
+                >
+
+                <button type="submit">
+                    View My Attendance →
+                </button>
+
+            </form>
+
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

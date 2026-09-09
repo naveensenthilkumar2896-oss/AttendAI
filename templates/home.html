@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AttendAI | Attendance Intelligence Platform</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(70, 214, 197, 0.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at top right,
+                    rgba(94, 156, 255, 0.12),
+                    transparent 30%
+                ),
+                #08141d;
+
+            color: #eaf2f7;
+
+        }
+
+
+        /* ======================================
+           NAVBAR
+        ====================================== */
+
+        nav {
+
+            width: min(1200px, 92%);
+
+            margin: auto;
+
+            height: 80px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        .logo span {
+
+            color: #46d6c5;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 25px;
+
+            align-items: center;
+
+        }
+
+
+        .nav-links a {
+
+            color: #aab9c4;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .nav-links a:hover {
+
+            color: #46d6c5;
+
+        }
+
+
+        /* ======================================
+           HERO
+        ====================================== */
+
+        .hero {
+
+            width: min(1200px, 92%);
+
+            margin: auto;
+
+            min-height: 620px;
+
+            display: grid;
+
+            grid-template-columns:
+                1.1fr 0.9fr;
+
+            align-items: center;
+
+            gap: 50px;
+
+            padding-bottom: 60px;
+
+        }
+
+
+        .hero-badge {
+
+            display: inline-block;
+
+            padding: 8px 14px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(70, 214, 197, 0.10);
+
+            border:
+                1px solid
+                rgba(70, 214, 197, 0.25);
+
+            color: #46d6c5;
+
+            font-size: 13px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(42px, 6vw, 72px);
+
+            line-height: 1.05;
+
+            margin:
+                0 0 25px;
+
+        }
+
+
+        .hero h1 span {
+
+            color: #46d6c5;
+
+        }
+
+
+        .hero p {
+
+            color: #9cafba;
+
+            font-size: 18px;
+
+            line-height: 1.7;
+
+            max-width: 600px;
+
+        }
+
+
+        /* ======================================
+           HERO BUTTONS
+        ====================================== */
+
+        .hero-buttons {
+
+            display: flex;
+
+            gap: 15px;
+
+            margin-top: 32px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .primary-button {
+
+            background: #46d6c5;
+
+            color: #07111a;
+
+            text-decoration: none;
+
+            padding: 15px 24px;
+
+            border-radius: 12px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .primary-button:hover {
+
+            transform:
+                translateY(-3px);
+
+        }
+
+
+        .secondary-button {
+
+            background: #10212d;
+
+            border:
+                1px solid #294353;
+
+            color: #eaf2f7;
+
+            text-decoration: none;
+
+            padding: 15px 24px;
+
+            border-radius: 12px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .secondary-button:hover {
+
+            border-color: #46d6c5;
+
+        }
+
+
+        /* ======================================
+           HERO DASHBOARD PREVIEW
+        ====================================== */
+
+        .dashboard-preview {
+
+            padding: 25px;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #112530,
+                    #0b1822
+                );
+
+            border:
+                1px solid #294353;
+
+            box-shadow:
+                0 30px 80px
+                rgba(0, 0, 0, 0.35);
+
+        }
+
+
+        .preview-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .preview-title {
+
+            font-weight: bold;
+
+        }
+
+
+        .online-status {
+
+            font-size: 12px;
+
+            color: #46d6c5;
+
+        }
+
+
+        .preview-stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 14px;
+
+        }
+
+
+        .preview-stat {
+
+            background:
+                rgba(255,255,255,0.04);
+
+            padding: 18px;
+
+            border-radius: 15px;
+
+        }
+
+
+        .preview-stat p {
+
+            font-size: 12px;
+
+            margin: 0;
+
+            color: #8fa4b3;
+
+        }
+
+
+        .preview-stat h3 {
+
+            margin: 10px 0 0;
+
+            font-size: 26px;
+
+        }
+
+
+        .fake-chart {
+
+            height: 180px;
+
+            margin-top: 20px;
+
+            padding: 20px;
+
+            display: flex;
+
+            align-items: end;
+
+            gap: 12px;
+
+            background:
+                rgba(255,255,255,0.03);
+
+            border-radius: 15px;
+
+        }
+
+
+        .bar {
+
+            flex: 1;
+
+            border-radius: 8px 8px 2px 2px;
+
+            background:
+                linear-gradient(
+                    to top,
+                    #46d6c5,
+                    #7fb3ff
+                );
+
+        }
+
+
+        .bar:nth-child(1) {
+            height: 40%;
+        }
+
+        .bar:nth-child(2) {
+            height: 65%;
+        }
+
+        .bar:nth-child(3) {
+            height: 85%;
+        }
+
+        .bar:nth-child(4) {
+            height: 55%;
+        }
+
+        .bar:nth-child(5) {
+            height: 95%;
+        }
+
+
+        /* ======================================
+           FEATURES
+        ====================================== */
+
+        .section {
+
+            width: min(1200px, 92%);
+
+            margin: auto;
+
+            padding:
+                90px 0;
+
+        }
+
+
+        .section-heading {
+
+            text-align: center;
+
+            margin-bottom: 50px;
+
+        }
+
+
+        .section-heading h2 {
+
+            font-size:
+                clamp(30px, 4vw, 45px);
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .section-heading p {
+
+            color: #8fa4b3;
+
+            max-width: 650px;
+
+            margin: auto;
+
+            line-height: 1.6;
+
+        }
+
+
+        .features-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+        }
+
+
+        .feature-card {
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            background: #10212d;
+
+            border:
+                1px solid #294353;
+
+            transition: 0.2s;
+
+        }
+
+
+        .feature-card:hover {
+
+            transform:
+                translateY(-6px);
+
+            border-color:
+                #46d6c5;
+
+        }
+
+
+        .feature-icon {
+
+            font-size: 35px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .feature-card h3 {
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .feature-card p {
+
+            color: #8fa4b3;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+        }
+
+
+        /* ======================================
+           HOW IT WORKS
+        ====================================== */
+
+        .steps-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+
+        }
+
+
+        .step {
+
+            text-align: center;
+
+            padding: 30px;
+
+        }
+
+
+        .step-number {
+
+            width: 55px;
+
+            height: 55px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #46d6c5;
+
+            color: #07111a;
+
+            font-weight: bold;
+
+            font-size: 20px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .step p {
+
+            color: #8fa4b3;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* ======================================
+           PORTAL SECTION
+        ====================================== */
+
+        .portal-section {
+
+            padding: 70px;
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #102833,
+                    #0c1822
+                );
+
+            border:
+                1px solid #294353;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 30px;
+
+        }
+
+
+        .portal-card {
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,0.04);
+
+        }
+
+
+        .portal-card h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        .portal-card p {
+
+            color: #8fa4b3;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        /* ======================================
+           FOOTER
+        ====================================== */
+
+        footer {
+
+            margin-top: 80px;
+
+            padding: 35px;
+
+            border-top:
+                1px solid #203744;
+
+            text-align: center;
+
+            color: #60727d;
+
+            font-size: 13px;
+
+        }
+
+
+        /* ======================================
+           MOBILE RESPONSIVE
+        ====================================== */
+
+        @media (max-width: 900px) {
+
+            .hero {
+
+                grid-template-columns:
+                    1fr;
+
+                padding-top: 70px;
+
+            }
+
+
+            .features-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .steps-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .portal-section {
+
+                grid-template-columns:
+                    1fr;
+
+                padding: 30px;
+
+            }
+
+
+            .nav-links {
+
+                display: none;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .hero {
+
+                min-height:
+                    auto;
+
+                padding:
+                    50px 0;
+
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    45px;
+
+            }
+
+
+            .preview-stats {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================
+     NAVIGATION
+====================================== -->
+
+<nav>
+
+    <div class="logo">
+
+        Attend<span>AI</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#how-it-works">
+            How It Works
+        </a>
+
+        <a href="/student">
+            Student Portal
+        </a>
+
+        <a href="/staff">
+            Staff Portal
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ======================================
+     HERO
+====================================== -->
+
+<section class="hero">
+
+
+    <div>
+
+        <div class="hero-badge">
+
+            ● Attendance Intelligence Platform
+
+        </div>
+
+
+        <h1>
+
+            Smarter
+            <span>Attendance</span>
+
+            Insights for Every Student.
+
+        </h1>
+
+
+        <p>
+
+            AttendAI transforms attendance data into
+            meaningful insights. Students can instantly
+            check their attendance, while staff can
+            monitor class performance through an
+            intelligent analytics dashboard.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a href="/student"
+               class="primary-button">
+
+                Check My Attendance →
+
+            </a>
+
+
+            <a href="/staff"
+               class="secondary-button">
+
+                Open Staff Dashboard
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- DASHBOARD PREVIEW -->
+
+    <div class="dashboard-preview">
+
+
+        <div class="preview-header">
+
+            <div class="preview-title">
+
+                Attendance Overview
+
+            </div>
+
+
+            <div class="online-status">
+
+                ● Live Analysis
+
+            </div>
+
+
+        </div>
+
+
+        <div class="preview-stats">
+
+
+            <div class="preview-stat">
+
+                <p>
+                    Total Students
+                </p>
+
+                <h3>
+                    51
+                </h3>
+
+            </div>
+
+
+            <div class="preview-stat">
+
+                <p>
+                    Attendance Analytics
+                </p>
+
+                <h3>
+                    AI
+                </h3>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="fake-chart">
+
+            <div class="bar"></div>
+
+            <div class="bar"></div>
+
+            <div class="bar"></div>
+
+            <div class="bar"></div>
+
+            <div class="bar"></div>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ======================================
+     FEATURES
+====================================== -->
+
+<section
+    class="section"
+    id="features"
+>
+
+
+    <div class="section-heading">
+
+        <h2>
+
+            Everything You Need for Attendance Analysis
+
+        </h2>
+
+
+        <p>
+
+            AttendAI combines student attendance records
+            and analytics to provide a simple and
+            intelligent attendance monitoring experience.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="features-grid">
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🎓
+            </div>
+
+            <h3>
+                Student Portal
+            </h3>
+
+            <p>
+
+                Students can enter their register number
+                and instantly view their attendance
+                percentage, attendance status and
+                detailed information.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Attendance Analytics
+            </h3>
+
+            <p>
+
+                Staff can understand class attendance
+                through distribution charts, risk
+                analysis and attendance statistics.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🧠
+            </div>
+
+            <h3>
+                Intelligent Insights
+            </h3>
+
+            <p>
+
+                The system automatically calculates
+                class health, highest attendance,
+                lowest attendance and student risk
+                levels.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ======================================
+     HOW IT WORKS
+====================================== -->
+
+<section
+    class="section"
+    id="how-it-works"
+>
+
+
+    <div class="section-heading">
+
+        <h2>
+
+            How AttendAI Works
+
+        </h2>
+
+
+        <p>
+
+            A simple workflow that transforms attendance
+            records into useful academic insights.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="steps-grid">
+
+
+        <div class="step">
+
+            <div class="step-number">
+
+                1
+
+            </div>
+
+
+            <h3>
+
+                Attendance Data
+
+            </h3>
+
+
+            <p>
+
+                Student attendance records are processed
+                from the academic attendance dataset.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-number">
+
+                2
+
+            </div>
+
+
+            <h3>
+
+                Intelligent Analysis
+
+            </h3>
+
+
+            <p>
+
+                AttendAI calculates attendance levels,
+                risk status and class-level statistics.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="step">
+
+            <div class="step-number">
+
+                3
+
+            </div>
+
+
+            <h3>
+
+                Actionable Insights
+
+            </h3>
+
+
+            <p>
+
+                Students and staff receive clear
+                information that helps monitor
+                attendance performance.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ======================================
+     PORTALS
+====================================== -->
+
+<section class="section">
+
+
+    <div class="portal-section">
+
+
+        <div class="portal-card">
+
+            <h2>
+
+                🎓 Student Portal
+
+            </h2>
+
+
+            <p>
+
+                Enter your register number and view
+                your personal attendance information
+                instantly.
+
+            </p>
+
+
+            <a
+                href="/student"
+                class="primary-button"
+            >
+
+                Student Access →
+
+            </a>
+
+        </div>
+
+
+
+        <div class="portal-card">
+
+            <h2>
+
+                👩‍🏫 Staff Portal
+
+            </h2>
+
+
+            <p>
+
+                Access the complete class attendance
+                dashboard and view analytics for all
+                available student records.
+
+            </p>
+
+
+            <a
+                href="/staff"
+                class="secondary-button"
+            >
+
+                Staff Access →
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ======================================
+     FOOTER
+====================================== -->
+
+<footer>
+
+    <strong>
+
+        AttendAI
+
+    </strong>
+
+    <br>
+
+    Academic Attendance Intelligence Platform
+
+</footer>
+
+
+</body>
+
+</html>

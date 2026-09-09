@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AttendAI - Dashboard</title>
+
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">AI</div>
+
+            <div>
+                <h2>AttendAI</h2>
+                <p>Attendance Intelligence</p>
+            </div>
+        </div>
+
+
+        <!-- Navigation -->
+        <nav>
+
+            <a href="#" class="active">
+                📊 <span>Class Overview</span>
+            </a>
+
+            <a href="#">
+                👨‍🎓 <span>Student Analytics</span>
+            </a>
+
+            <a href="#">
+                🤖 <span>Risk Forecaster</span>
+            </a>
+
+            <a href="#">
+                📋 <span>Daily Roll Call</span>
+            </a>
+
+        </nav>
+
+
+        <!-- Sidebar Bottom -->
+        <div class="sidebar-bottom">
+
+            <p class="small-text">Active Session</p>
+
+            <h3>Head of Department (CSE)</h3>
+
+            <hr>
+
+            <p class="small-text">Regulation Cutoff</p>
+
+            <div class="cutoff">
+                <span>75%</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div>
+                <h1>Class Overview & Deficit Diagnostics</h1>
+
+                <p>
+                    Cohort: 51 enrolled • Attendance Analytics Dashboard
+                </p>
+            </div>
+
+
+            <div class="header-buttons">
+
+                <button>📊 Export Excel Report</button>
+
+                <button>📄 Export Defaulters PDF</button>
+
+            </div>
+
+        </header>
+
+
+        <!-- STATISTICS CARDS -->
+        <section class="stats">
+
+            <div class="card teal-card">
+
+                <p>Class Attendance Mean</p>
+
+                <h2>89.8%</h2>
+
+                <span>Cohort-wide sessions</span>
+
+            </div>
+
+
+            <div class="card red-card">
+
+                <p>Students Below 75%</p>
+
+                <h2>2</h2>
+
+                <span>Regulation shortfall</span>
+
+            </div>
+
+
+            <div class="card yellow-card">
+
+                <p>Flagged Deficit Risks</p>
+
+                <h2>6</h2>
+
+                <span>Subject shortfall candidates</span>
+
+            </div>
+
+
+            <div class="card teal-card">
+
+                <p>Remaining Slots</p>
+
+                <h2>434</h2>
+
+                <span>Academic sessions remaining</span>
+
+            </div>
+
+        </section>
+
+
+        <!-- CHART SECTION -->
+        <section class="chart-section">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>Visual Semester Attendance Trajectory</h2>
+
+                    <p>
+                        Daily attendance performance across the semester
+                    </p>
+                </div>
+
+                <div class="sessions">
+                    Total Sessions: 51
+                </div>
+
+            </div>
+
+
+            <!-- BAR GRAPH -->
+            <div class="bar-chart">
+
+                <div class="bar high" style="height: 72%;"></div>
+                <div class="bar warning" style="height: 48%;"></div>
+                <div class="bar high" style="height: 75%;"></div>
+                <div class="bar high" style="height: 68%;"></div>
+                <div class="bar high" style="height: 85%;"></div>
+                <div class="bar high" style="height: 70%;"></div>
+                <div class="bar high" style="height: 77%;"></div>
+                <div class="bar warning" style="height: 52%;"></div>
+                <div class="bar high" style="height: 82%;"></div>
+                <div class="bar high" style="height: 73%;"></div>
+                <div class="bar high" style="height: 65%;"></div>
+                <div class="bar high" style="height: 76%;"></div>
+                <div class="bar high" style="height: 69%;"></div>
+                <div class="bar danger" style="height: 30%;"></div>
+                <div class="bar high" style="height: 72%;"></div>
+                <div class="bar warning" style="height: 45%;"></div>
+                <div class="bar high" style="height: 78%;"></div>
+                <div class="bar high" style="height: 80%;"></div>
+                <div class="bar danger" style="height: 38%;"></div>
+                <div class="bar high" style="height: 75%;"></div>
+                <div class="bar high" style="height: 85%;"></div>
+                <div class="bar high" style="height: 70%;"></div>
+                <div class="bar warning" style="height: 52%;"></div>
+                <div class="bar high" style="height: 79%;"></div>
+                <div class="bar high" style="height: 83%;"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT TABLE -->
+        <section class="table-section">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>REGISTER NO</th>
+                        <th>STUDENT NAME</th>
+                        <th>OVERALL %</th>
+                        <th>THEORY %</th>
+                        <th>LAB %</th>
+                        <th>DEFICIENT COURSES</th>
+                        <th>SAFE SKIPS</th>
+                        <th>RISK STATUS</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>8204241048</td>
+                        <td>MAHESWARI K</td>
+                        <td><strong>90.2%</strong></td>
+                        <td>89.2%</td>
+                        <td>94.4%</td>
+                        <td class="compliant">Compliant</td>
+                        <td class="safe-number">72</td>
+                        <td><span class="safe">Safe</span></td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>8204241049</td>
+                        <td>MANIBHARATHI C</td>
+                        <td><strong>98%</strong></td>
+                        <td>96.9%</td>
+                        <td>100%</td>
+                        <td class="compliant">Compliant</td>
+                        <td class="safe-number">109</td>
+                        <td><span class="safe">Safe</span></td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>8204241050</td>
+                        <td>MANIKANDAN S</td>
+                        <td><strong>86.1%</strong></td>
+                        <td>84.6%</td>
+                        <td>97.2%</td>
+                        <td class="compliant">Compliant</td>
+                        <td class="safe-number">48</td>
+                        <td><span class="safe">Safe</span></td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
