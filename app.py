@@ -2,12 +2,12 @@ from flask import Flask, render_template, request
 import pandas as pd
 import os
 from datetime import date, timedelta
+from functools import lru_cache
 
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, roc_auc_score
 
 
@@ -69,6 +69,7 @@ def safe_number(value, default=0.0):
 # LOAD STUDENT SUMMARY
 # ============================================================
 
+@lru_cache(maxsize=1)
 def load_students():
 
     data = pd.read_excel(
@@ -94,11 +95,10 @@ df = load_students()
 # LOAD DAILY ATTENDANCE LOGS
 # ============================================================
 
+@lru_cache(maxsize=1)
 def load_attendance_logs():
 
-    if not os.path.exists(
-        ATTENDANCE_LOG_FILE
-    ):
+    if not os.path.exists(ATTENDANCE_LOG_FILE):
         return pd.DataFrame()
 
     logs = pd.read_excel(
@@ -121,11 +121,13 @@ def load_attendance_logs():
     ]
 
     if missing:
-
         raise ValueError(
             "attendance_logs.xlsx is missing columns: "
             + ", ".join(missing)
         )
+
+    # Keep only columns actually used by the application.
+    logs = logs[required_columns].copy()
 
     logs["Date"] = pd.to_datetime(
         logs["Date"],
@@ -139,7 +141,7 @@ def load_attendance_logs():
 
     logs["Status"] = (
         logs["Status"]
-        .astype(str)
+        .astype("string")
         .str.strip()
         .str.lower()
     )
@@ -148,8 +150,30 @@ def load_attendance_logs():
         logs["Status"] == "active"
     ].copy()
 
-    return logs
+    # Normalize period values once when the file is loaded.
+    # This avoids repeating expensive .astype/.str operations
+    # every time the prediction page is opened.
+    for period in PERIODS:
+        logs[period] = (
+            logs[period]
+            .astype("string")
+            .str.strip()
+            .str.upper()
+        )
 
+    logs["period_absences"] = 0
+
+    for period in PERIODS:
+        logs["period_absences"] += (
+            logs[period] == "A"
+        ).astype("int8")
+
+    logs["daily_leave"] = (
+        logs["period_absences"]
+        >= LEAVE_THRESHOLD
+    ).astype("int8")
+
+    return logs
 
 # ============================================================
 # PREPARE PERIOD-LEVEL TRAINING DATA
@@ -266,6 +290,7 @@ def prepare_training_data(logs):
 # EXISTING AI FUTURE ABSENCE FORECAST
 # ============================================================
 
+@lru_cache(maxsize=1)
 def build_ai_forecast():
 
     logs = load_attendance_logs()
@@ -944,391 +969,271 @@ def prepare_daily_leave_data(logs):
 # NEW AI: SELECTED DATE LEAVE PREDICTION
 # ============================================================
 
+@lru_cache(maxsize=31)
 def build_selected_date_leave_prediction(
     prediction_date
 ):
 
     logs = load_attendance_logs()
 
-    daily_data = prepare_daily_leave_data(
-        logs
-    )
-
-    if daily_data.empty:
-
+    if logs.empty:
         return None, (
             "Daily attendance data is not available."
         )
 
     latest_log_date = (
-        daily_data["Date"]
+        logs["Date"]
         .max()
         .date()
     )
 
     if prediction_date <= latest_log_date:
-
         return None, (
             "Please select a date after "
             f"{latest_log_date.strftime('%d-%m-%Y')}."
         )
 
     if prediction_date > LAST_WORKING_DAY:
-
         return None, (
             "Prediction date cannot be after "
             f"{LAST_WORKING_DAY.strftime('%d-%m-%Y')}."
         )
 
     if prediction_date.weekday() == 6:
-
         return None, (
             "Sunday is not a working day. "
             "Please select another date."
         )
 
     # --------------------------------------------------------
-    # Historical features for every student
+    # DAILY HISTORY
     # --------------------------------------------------------
 
-    student_list = df[
-        "Register No"
-    ].astype(str).apply(
-        clean_register
-    ).tolist()
-
-    student_list = list(
-        dict.fromkeys(student_list)
+    daily_data = (
+        logs[
+            [
+                "Date",
+                "Reg No",
+                "Student Name",
+                "period_absences",
+                "daily_leave"
+            ]
+        ]
+        .dropna(subset=["Date"])
+        .sort_values(["Reg No", "Date"])
+        .copy()
     )
+
+    daily_data["weekday"] = (
+        daily_data["Date"].dt.dayofweek
+    )
+
+    # All students shown in the dashboard are included.
+    student_list = (
+        df["Register No"]
+        .astype(str)
+        .apply(clean_register)
+        .drop_duplicates()
+        .tolist()
+    )
+
+    # --------------------------------------------------------
+    # Efficient historical features
+    # --------------------------------------------------------
+
+    global_leave_rate = float(
+        daily_data["daily_leave"].mean()
+    )
+
+    # Per-student period absence rate.
+    period_rates = (
+        logs.groupby("Reg No")["period_absences"]
+        .sum()
+        .div(
+            logs.groupby("Reg No").size() * len(PERIODS)
+        )
+        .fillna(0.0)
+    )
+
+    # Previous-day features.
+    grouped = daily_data.groupby(
+        "Reg No",
+        sort=False
+    )
+
+    daily_data["previous_leave"] = (
+        grouped["daily_leave"].shift(1)
+    )
+
+    daily_data["historical_leave_rate"] = (
+        grouped["daily_leave"]
+        .transform(
+            lambda s: (
+                s.cumsum() - s
+            ) / s.cumcount().replace(0, pd.NA)
+        )
+        .fillna(global_leave_rate)
+        .astype(float)
+    )
+
+    daily_data["recent_leave_rate"] = (
+        grouped["daily_leave"]
+        .transform(
+            lambda s:
+            s.shift(1)
+            .rolling(
+                window=10,
+                min_periods=1
+            )
+            .mean()
+        )
+        .fillna(daily_data["historical_leave_rate"])
+        .fillna(global_leave_rate)
+        .astype(float)
+    )
+
+    # Same-weekday historical leave rate, excluding the current row.
+    weekday_group = daily_data.groupby(
+        ["Reg No", "weekday"],
+        sort=False
+    )["daily_leave"]
+
+    same_weekday_count = weekday_group.cumcount()
+    same_weekday_sum = (
+        weekday_group.cumsum()
+        - daily_data["daily_leave"]
+    )
+
+    daily_data["same_weekday_rate"] = (
+        same_weekday_sum
+        / same_weekday_count.replace(0, pd.NA)
+    )
+
+    daily_data["same_weekday_rate"] = (
+        daily_data["same_weekday_rate"]
+        .fillna(daily_data["historical_leave_rate"])
+        .fillna(global_leave_rate)
+        .astype(float)
+    )
+
+    # Calculate consecutive leave streak before each day.
+    streak_values = []
+    for _, group in daily_data.groupby(
+        "Reg No",
+        sort=False
+    ):
+        streak = 0
+
+        for value in group["daily_leave"].tolist():
+            streak_values.append(streak)
+
+            if int(value) == 1:
+                streak += 1
+            else:
+                streak = 0
+
+    daily_data["leave_streak"] = streak_values
+
+    daily_data["period_absence_rate"] = (
+        daily_data["Reg No"]
+        .map(period_rates)
+        .fillna(0.0)
+        .astype(float)
+    )
+
+    # --------------------------------------------------------
+    # Target-date features
+    # --------------------------------------------------------
+
+    target_weekday = prediction_date.weekday()
 
     feature_rows = []
 
     for register_no in student_list:
 
-        student_history = daily_data[
-            daily_data["Reg No"].astype(str)
-            == register_no
-        ].sort_values("Date")
+        history = daily_data[
+            daily_data["Reg No"] == register_no
+        ]
 
-        if student_history.empty:
-
-            historical_leave_rate = 0.0
-            recent_leave_rate = 0.0
-            same_weekday_rate = 0.0
+        if history.empty:
+            historical_rate = global_leave_rate
+            recent_rate = global_leave_rate
+            same_weekday_rate = global_leave_rate
             previous_leave = 0
             leave_streak = 0
-
         else:
-
-            historical_leave_rate = float(
-                student_history[
-                    "daily_leave"
-                ].mean()
+            historical_rate = float(
+                history["daily_leave"].mean()
             )
 
-            recent_history = (
-                student_history
+            recent_rate = float(
+                history["daily_leave"]
                 .tail(10)
+                .mean()
             )
 
-            recent_leave_rate = float(
-                recent_history[
-                    "daily_leave"
-                ].mean()
-            )
-
-            weekday_history = (
-                student_history[
-                    student_history[
-                        "Date"
-                    ].dt.dayofweek
-                    ==
-                    prediction_date.weekday()
-                ]
-            )
+            weekday_history = history[
+                history["weekday"] == target_weekday
+            ]
 
             if weekday_history.empty:
-
-                same_weekday_rate = (
-                    historical_leave_rate
-                )
-
+                same_weekday_rate = historical_rate
             else:
-
                 same_weekday_rate = float(
-                    weekday_history[
-                        "daily_leave"
-                    ].mean()
+                    weekday_history["daily_leave"].mean()
                 )
 
             previous_leave = int(
-                student_history.iloc[-1][
-                    "daily_leave"
-                ]
+                history.iloc[-1]["daily_leave"]
             )
 
-            leave_streak = 0
-
-            for value in reversed(
-                student_history[
-                    "daily_leave"
-                ].tolist()
-            ):
-
-                if int(value) == 1:
-                    leave_streak += 1
-                else:
-                    break
-
-        # Period absence behaviour
-        student_logs = logs[
-            logs["Reg No"].astype(str)
-            == register_no
-        ].copy()
-
-        if student_logs.empty:
-
-            period_absence_rate = 0.0
-
-        else:
-
-            absence_values = []
-
-            for period in PERIODS:
-
-                absence_values.extend(
-                    (
-                        student_logs[period]
-                        .astype(str)
-                        .str.strip()
-                        .str.upper()
-                        == "A"
-                    ).astype(int).tolist()
-                )
-
-            if absence_values:
-
-                period_absence_rate = float(
-                    sum(absence_values)
-                    /
-                    len(absence_values)
-                )
-
-            else:
-
-                period_absence_rate = 0.0
+            leave_streak = int(
+                history.iloc[-1]["leave_streak"]
+            )
 
         feature_rows.append(
             {
-                "Reg No":
-                    register_no,
-
-                "weekday":
-                    prediction_date.weekday(),
-
-                "historical_leave_rate":
-                    historical_leave_rate,
-
-                "recent_leave_rate":
-                    recent_leave_rate,
-
-                "same_weekday_rate":
-                    same_weekday_rate,
-
-                "previous_leave":
-                    previous_leave,
-
-                "leave_streak":
-                    leave_streak,
-
-                "period_absence_rate":
-                    period_absence_rate
+                "Reg No": register_no,
+                "weekday": target_weekday,
+                "historical_leave_rate": historical_rate,
+                "recent_leave_rate": recent_rate,
+                "same_weekday_rate": same_weekday_rate,
+                "previous_leave": previous_leave,
+                "leave_streak": leave_streak,
+                "period_absence_rate": float(
+                    period_rates.get(
+                        register_no,
+                        0.0
+                    )
+                )
             }
         )
 
-    feature_data = pd.DataFrame(
-        feature_rows
-    )
+    feature_data = pd.DataFrame(feature_rows)
 
     # --------------------------------------------------------
-    # Training data
+    # Historical training rows
     # --------------------------------------------------------
 
-    training_rows = []
+    training_data = daily_data[
+        [
+            "Reg No",
+            "weekday",
+            "historical_leave_rate",
+            "recent_leave_rate",
+            "same_weekday_rate",
+            "previous_leave",
+            "leave_streak",
+            "period_absence_rate",
+            "daily_leave"
+        ]
+    ].copy()
 
-    for register_no in student_list:
-
-        student_history = daily_data[
-            daily_data["Reg No"].astype(str)
-            == register_no
-        ].sort_values("Date")
-
-        if len(student_history) < 3:
-            continue
-
-        history_values = (
-            student_history[
-                "daily_leave"
-            ].tolist()
-        )
-
-        dates = (
-            student_history[
-                "Date"
-            ].tolist()
-        )
-
-        for index in range(2, len(history_values)):
-
-            previous_values = (
-                history_values[:index]
-            )
-
-            recent_values = (
-                previous_values[-10:]
-            )
-
-            historical_rate = (
-                sum(previous_values)
-                /
-                len(previous_values)
-            )
-
-            recent_rate = (
-                sum(recent_values)
-                /
-                len(recent_values)
-            )
-
-            current_date = dates[index]
-
-            same_weekday_values = []
-
-            for j in range(index):
-
-                if (
-                    dates[j].dayofweek
-                    ==
-                    current_date.dayofweek
-                ):
-
-                    same_weekday_values.append(
-                        history_values[j]
-                    )
-
-            if same_weekday_values:
-
-                same_weekday_rate = (
-                    sum(
-                        same_weekday_values
-                    )
-                    /
-                    len(
-                        same_weekday_values
-                    )
-                )
-
-            else:
-
-                same_weekday_rate = (
-                    historical_rate
-                )
-
-            previous_leave = (
-                history_values[index - 1]
-            )
-
-            streak = 0
-
-            for value in reversed(
-                previous_values
-            ):
-
-                if value == 1:
-
-                    streak += 1
-
-                else:
-
-                    break
-
-            student_logs = logs[
-                logs["Reg No"].astype(str)
-                == register_no
-            ]
-
-            if student_logs.empty:
-
-                period_absence_rate = 0.0
-
-            else:
-
-                absence_values = []
-
-                for period in PERIODS:
-
-                    absence_values.extend(
-                        (
-                            student_logs[
-                                period
-                            ]
-                            .astype(str)
-                            .str.strip()
-                            .str.upper()
-                            == "A"
-                        )
-                        .astype(int)
-                        .tolist()
-                    )
-
-                if absence_values:
-
-                    period_absence_rate = (
-                        sum(absence_values)
-                        /
-                        len(absence_values)
-                    )
-
-                else:
-
-                    period_absence_rate = 0.0
-
-            training_rows.append(
-                {
-                    "Reg No":
-                        register_no,
-
-                    "weekday":
-                        current_date.dayofweek,
-
-                    "historical_leave_rate":
-                        historical_rate,
-
-                    "recent_leave_rate":
-                        recent_rate,
-
-                    "same_weekday_rate":
-                        same_weekday_rate,
-
-                    "previous_leave":
-                        previous_leave,
-
-                    "leave_streak":
-                        streak,
-
-                    "period_absence_rate":
-                        period_absence_rate,
-
-                    "daily_leave":
-                        int(
-                            history_values[index]
-                        )
-                }
-            )
-
-    training_data = pd.DataFrame(
-        training_rows
-    )
+    # The first historical row for a student has no previous-day
+    # information, so it is not useful as a supervised example.
+    training_data = training_data[
+        training_data["previous_leave"].notna()
+    ].copy()
 
     feature_columns = [
         "Reg No",
@@ -1343,19 +1248,22 @@ def build_selected_date_leave_prediction(
 
     if (
         training_data.empty
-        or
-        training_data["daily_leave"].nunique()
-        < 2
+        or training_data["daily_leave"].nunique() < 2
     ):
-
         return None, (
             "There is not enough historical leave variation "
             "to train the selected-date prediction model."
         )
 
     # --------------------------------------------------------
-    # Random Forest
+    # Lightweight AI model
     # --------------------------------------------------------
+    #
+    # Logistic regression is intentionally used here instead of
+    # a 300-tree Random Forest. Both provide probability-based
+    # classification, but LogisticRegression uses substantially
+    # less RAM on Render's free instance.
+    #
 
     categorical_features = [
         "Reg No",
@@ -1396,13 +1304,10 @@ def build_selected_date_leave_prediction(
             ),
             (
                 "model",
-                RandomForestClassifier(
-                    n_estimators=300,
-                    max_depth=10,
-                    min_samples_leaf=2,
+                LogisticRegression(
+                    max_iter=500,
                     class_weight="balanced",
-                    random_state=42,
-                    n_jobs=-1
+                    random_state=42
                 )
             )
         ]
@@ -1413,20 +1318,15 @@ def build_selected_date_leave_prediction(
         training_data["daily_leave"]
     )
 
-    feature_data[
-        "probability"
-    ] = (
+    feature_data["probability"] = (
         model
         .predict_proba(
-            feature_data[
-                feature_columns
-            ]
+            feature_data[feature_columns]
         )[:, 1]
     )
 
     feature_data["prediction"] = (
-        feature_data["probability"]
-        >= 0.50
+        feature_data["probability"] >= 0.50
     ).map(
         {
             True: "YES",
@@ -1476,7 +1376,6 @@ def build_selected_date_leave_prediction(
     ]
 
     prediction_result = {
-
         "prediction_date":
             prediction_date.strftime(
                 "%d-%m-%Y"
@@ -1500,7 +1399,6 @@ def build_selected_date_leave_prediction(
     }
 
     return prediction_result, None
-
 
 # ============================================================
 # HOME
