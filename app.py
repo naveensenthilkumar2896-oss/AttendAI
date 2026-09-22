@@ -1068,9 +1068,10 @@ def build_selected_date_leave_prediction(
     daily_data["historical_leave_rate"] = (
         grouped["daily_leave"]
         .transform(
-            lambda s: (
-                s.cumsum() - s
-            ) / s.cumcount().replace(0, pd.NA)
+            lambda s:
+            s.shift(1)
+            .expanding()
+            .mean()
         )
         .fillna(global_leave_rate)
         .astype(float)
