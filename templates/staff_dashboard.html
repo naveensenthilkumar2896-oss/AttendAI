@@ -5,12 +5,12 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Staff Dashboard | AttendAI</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>AttendAI Staff Dashboard</title>
 
 
     <style>
@@ -20,515 +20,819 @@
         }
 
 
-        body {
+        html {
+            background: #08141d;
+        }
 
+
+        body {
             margin: 0;
+
             min-height: 100vh;
 
-            font-family: Arial, sans-serif;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
 
             background:
                 radial-gradient(
                     circle at top right,
-                    rgba(94, 156, 255, 0.12),
+                    rgba(70,214,197,.08),
                     transparent 35%
                 ),
                 #08141d;
 
             color: #eaf2f7;
-
         }
 
 
-        .dashboard-container {
+        .container {
+            width: 94%;
+            max-width: 1400px;
 
-            width: min(1400px, 94%);
-            margin: auto;
-            padding: 35px 0 60px;
+            margin: 0 auto;
 
+            padding:
+                30px 0 60px;
         }
 
 
-        /* HEADER */
+        /* ============================
+           HEADER
+        ============================ */
 
-        .dashboard-header {
-
+        .header {
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
             align-items: center;
 
             gap: 20px;
 
-            margin-bottom: 35px;
-
+            margin-bottom: 30px;
         }
 
 
-        .dashboard-header h1 {
-
+        .header h1 {
             margin: 0;
 
-            font-size:
-                clamp(28px, 4vw, 42px);
-
+            font-size: 32px;
         }
 
 
-        .dashboard-header p {
-
-            margin-top: 8px;
+        .header p {
+            margin:
+                7px 0 0;
 
             color: #8fa4b3;
-
         }
 
 
-        .back-button {
+        .home-btn {
+            display: inline-block;
+
+            padding:
+                11px 17px;
+
+            color: #46d6c5;
 
             text-decoration: none;
-
-            color: white;
-
-            padding: 12px 18px;
-
-            border-radius: 10px;
-
-            border:
-                1px solid #294353;
-
-            background:
-                #10212d;
-
-        }
-
-
-        /* SUMMARY */
-
-        .summary-cards {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 30px;
-
-        }
-
-
-        .summary-card {
-
-            padding: 25px;
-
-            border-radius: 18px;
 
             background: #10212d;
 
             border:
                 1px solid #294353;
 
+            border-radius: 10px;
         }
 
 
-        .summary-card p {
+        .home-btn:hover {
+            border-color:
+                #46d6c5;
+        }
 
-            margin: 0;
 
+        /* ============================
+           CARDS
+        ============================ */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .card {
+            background: #10212d;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 18px;
+
+            padding: 22px;
+        }
+
+
+        .card-label {
             color: #8fa4b3;
 
             font-size: 14px;
 
+            margin-bottom: 10px;
         }
 
 
-        .summary-card h2 {
+        .card-value {
+            font-size: 30px;
 
-            margin:
-                12px 0 0;
-
-            font-size: 32px;
-
+            font-weight: bold;
         }
 
 
-        /* SECTION TITLE */
+        /* ============================
+           SECTIONS
+        ============================ */
+
+        .section {
+            margin-top: 30px;
+        }
+
 
         .section-title {
-
             margin:
-                40px 0 20px;
+                0 0 16px;
 
-            font-size:
-                25px;
-
+            font-size: 23px;
         }
 
 
-        /* INSIGHTS */
+        /* ============================
+           CLASS INTELLIGENCE
+        ============================ */
 
-        .insights-grid {
-
+        .intelligence-grid {
             display: grid;
 
             grid-template-columns:
                 repeat(3, 1fr);
 
-            gap: 20px;
-
+            gap: 18px;
         }
 
 
-        .insight-card {
+        .intelligence-card {
+            background: #10212d;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 18px;
+
+            padding: 22px;
+        }
+
+
+        .intelligence-card h3 {
+            margin:
+                0 0 12px;
+        }
+
+
+        .intelligence-card p {
+            margin: 0;
+
+            color: #8fa4b3;
+
+            line-height: 1.6;
+        }
+
+
+        .big-number {
+            color: #46d6c5;
+
+            font-size: 32px;
+
+            font-weight: bold;
+        }
+
+
+        /* ============================
+           AI LEAVE PREDICTION
+        ============================ */
+
+        .ai-box {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(70,214,197,.07),
+                    #10212d
+                );
+
+            border:
+                1px solid
+                rgba(70,214,197,.35);
+
+            border-radius: 18px;
 
             padding: 25px;
+        }
 
-            border-radius: 20px;
+
+        .ai-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .ai-title-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
 
             background:
-                #10212d;
+                rgba(70,214,197,.12);
 
-            border:
-                1px solid #294353;
-
+            font-size: 22px;
         }
 
 
-        .insight-label {
+        .ai-title h2 {
+            margin: 0;
 
-            color:
-                #8fa4b3;
-
-            font-size:
-                14px;
-
+            font-size: 23px;
         }
 
 
-        .insight-value {
+        .ai-description {
+            color: #8fa4b3;
 
-            margin-top:
-                15px;
-
-            color:
-                #46d6c5;
-
-            font-size:
-                36px;
-
-            font-weight:
-                bold;
-
-        }
-
-
-        .health-text {
-
-            margin-top:
-                15px;
-
-            color:
-                #aab9c4;
-
-            line-height:
-                1.6;
-
-        }
-
-
-        /* CHARTS */
-
-        .charts-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 22px;
-
-            margin-bottom:
-                35px;
-
-        }
-
-
-        .chart-card {
-
-            background:
-                #10212d;
-
-            border:
-                1px solid #294353;
-
-            border-radius:
-                20px;
-
-            padding:
-                25px;
-
-        }
-
-
-        .chart-card h3 {
+            line-height: 1.6;
 
             margin:
-                0 0 20px;
-
+                0 0 22px;
         }
 
 
-        .chart-wrapper {
+        /* ============================
+           DATE FORM
+        ============================ */
 
-            height:
-                320px;
+        .prediction-form {
+            display: flex;
 
-            position:
-                relative;
+            align-items: flex-end;
 
+            gap: 15px;
+
+            flex-wrap: wrap;
         }
 
 
-        /* SEARCH */
+        .date-area {
+            flex: 1;
 
-        .staff-search-box {
-
-            margin-bottom:
-                25px;
-
+            min-width: 240px;
         }
 
 
-        .staff-search-box input {
+        .date-area label {
+            display: block;
 
-            width:
-                100%;
+            margin-bottom: 8px;
+
+            color: #8fa4b3;
+
+            font-size: 14px;
+        }
+
+
+        .date-input {
+            width: 100%;
+
+            height: 48px;
 
             padding:
-                17px 20px;
+                0 14px;
 
-            border-radius:
-                12px;
+            background: #08141d;
+
+            color: #eaf2f7;
 
             border:
                 1px solid #294353;
 
-            background:
-                #10212d;
+            border-radius: 11px;
 
-            color:
-                white;
+            font-size: 15px;
 
-            font-size:
-                16px;
+            cursor: pointer;
 
-            outline:
-                none;
-
+            outline: none;
         }
 
 
-        .staff-search-box input:focus {
-
+        .date-input:focus {
             border-color:
                 #46d6c5;
 
+            box-shadow:
+                0 0 0 3px
+                rgba(70,214,197,.10);
         }
 
 
-        /* TABLE */
+        .date-input::-webkit-calendar-picker-indicator {
+            cursor: pointer;
 
-        .table-container {
+            filter: invert(1);
 
-            overflow-x:
-                auto;
+            opacity: .9;
+        }
 
-            border-radius:
-                18px;
+
+        .date-help {
+            margin-top: 7px;
+
+            color: #718b99;
+
+            font-size: 12px;
+        }
+
+
+        .predict-button {
+            height: 48px;
+
+            padding:
+                0 22px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: #46d6c5;
+
+            color: #061319;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .predict-button:hover {
+            filter:
+                brightness(1.07);
+        }
+
+
+        /* ============================
+           ERROR
+        ============================ */
+
+        .error {
+            margin-top: 18px;
+
+            padding:
+                13px 15px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,80,80,.10);
+
+            border:
+                1px solid
+                rgba(255,80,80,.30);
+
+            color: #ff9b9b;
+
+            line-height: 1.5;
+        }
+
+
+        /* ============================
+           PREDICTION SUMMARY
+        ============================ */
+
+        .prediction-summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+            margin-top: 24px;
+        }
+
+
+        .prediction-card {
+            background: #08141d;
 
             border:
                 1px solid #294353;
 
-            background:
-                #10212d;
+            border-radius: 14px;
 
+            padding: 18px;
+        }
+
+
+        .prediction-card-label {
+            color: #8fa4b3;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .prediction-card-value {
+            font-size: 23px;
+
+            font-weight: bold;
+        }
+
+
+        /* ============================
+           PREDICTION TABLE
+        ============================ */
+
+        .table-box {
+            margin-top: 20px;
+
+            background: #10212d;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 15px;
+
+            overflow: auto;
         }
 
 
         table {
-
-            width:
-                100%;
+            width: 100%;
 
             border-collapse:
                 collapse;
-
-            min-width:
-                1000px;
-
         }
 
 
         th {
-
-            text-align:
-                left;
-
             padding:
-                18px;
+                14px 16px;
 
-            color:
-                #8fa4b3;
+            text-align: left;
 
-            font-size:
-                13px;
+            color: #8fa4b3;
 
-            border-bottom:
-                1px solid #294353;
+            background: #0b1a24;
 
+            font-size: 13px;
+
+            position: sticky;
+
+            top: 0;
         }
 
 
         td {
-
             padding:
-                18px;
+                13px 16px;
 
-            border-bottom:
-                1px solid #203744;
+            border-top:
+                1px solid #213744;
 
+            font-size: 14px;
         }
 
 
-        tr:last-child td {
+        .yes {
+            color: #ff8f8f;
 
-            border-bottom:
-                none;
-
+            font-weight: bold;
         }
 
 
-        tbody tr:hover {
+        .no {
+            color: #46d6c5;
+
+            font-weight: bold;
+        }
+
+
+        /* ============================
+           ROLL NUMBERS
+        ============================ */
+
+        .roll-box {
+            margin-top: 20px;
+
+            padding: 18px;
+
+            background: #08141d;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 14px;
+        }
+
+
+        .roll-box h3 {
+            margin:
+                0 0 14px;
+
+            font-size: 16px;
+        }
+
+
+        .roll-list {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+
+        .roll {
+            padding:
+                7px 10px;
 
             background:
-                rgba(255,255,255,0.03);
+                rgba(255,143,143,.08);
 
+            border:
+                1px solid
+                rgba(255,143,143,.25);
+
+            border-radius: 8px;
+
+            color: #ffb1b1;
+
+            font-size: 13px;
         }
 
 
-        .student-name {
-
-            color:
-                #eaf2f7;
-
-            text-decoration:
-                none;
-
-            font-weight:
-                bold;
-
+        .no-result {
+            color: #8fa4b3;
         }
 
 
-        .student-name:hover {
+        /* ============================
+           OLD AI FORECAST
+        ============================ */
 
-            color:
-                #46d6c5;
+        .forecast-box {
+            background: #10212d;
 
+            border:
+                1px solid #294353;
+
+            border-radius: 18px;
+
+            padding: 24px;
         }
 
 
-        .view-button {
+        .forecast-title {
+            margin:
+                0 0 10px;
 
-            text-decoration:
-                none;
+            font-size: 23px;
+        }
+
+
+        .forecast-description {
+            color: #8fa4b3;
+
+            line-height: 1.6;
+
+            margin-bottom: 20px;
+        }
+
+
+        .forecast-summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+        }
+
+
+        .forecast-card {
+            background: #08141d;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 13px;
+
+            padding: 17px;
+        }
+
+
+        .forecast-card-label {
+            color: #8fa4b3;
+
+            font-size: 12px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .forecast-card-value {
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+
+        .forecast-table {
+            margin-top: 20px;
+
+            max-height: 500px;
+
+            overflow: auto;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 13px;
+        }
+
+
+        .risk-high {
+            color: #ff8f8f;
+
+            font-weight: bold;
+        }
+
+
+        .risk-medium {
+            color: #ffd166;
+
+            font-weight: bold;
+        }
+
+
+        .risk-low {
+            color: #46d6c5;
+
+            font-weight: bold;
+        }
+
+
+        /* ============================
+           STUDENT RECORDS
+        ============================ */
+
+        .search {
+            width: 100%;
+
+            height: 48px;
 
             padding:
-                9px 14px;
+                0 15px;
 
-            border-radius:
-                8px;
+            background: #10212d;
 
-            background:
+            color: #eaf2f7;
+
+            border:
+                1px solid #294353;
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-size: 15px;
+
+            margin-bottom: 16px;
+        }
+
+
+        .search:focus {
+            border-color:
                 #46d6c5;
-
-            color:
-                #07111a;
-
-            font-weight:
-                bold;
-
-            font-size:
-                13px;
-
         }
 
 
-        .status-safe {
+        .profile {
+            display: inline-block;
 
-            color:
+            padding:
+                7px 11px;
+
+            border-radius: 8px;
+
+            color: #46d6c5;
+
+            text-decoration: none;
+
+            border:
+                1px solid #294353;
+        }
+
+
+        .profile:hover {
+            border-color:
                 #46d6c5;
-
         }
 
 
-        .status-risk {
+        /* ============================
+           RESPONSIVE
+        ============================ */
 
-            color:
-                #ffb45b;
+        @media (max-width: 1100px) {
 
-        }
-
-
-        /* RESPONSIVE */
-
-        @media (max-width: 1000px) {
-
-            .summary-cards {
+            .summary-grid,
+            .prediction-summary,
+            .forecast-summary {
 
                 grid-template-columns:
                     repeat(2, 1fr);
-
             }
 
 
-            .insights-grid {
+            .intelligence-grid {
 
                 grid-template-columns:
-                    1fr;
-
-            }
-
-
-            .charts-grid {
-
-                grid-template-columns:
-                    1fr;
-
+                    1fr 1fr;
             }
 
         }
 
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
 
-            .dashboard-header {
-
-                flex-direction:
-                    column;
+            .header {
 
                 align-items:
                     flex-start;
 
+                flex-direction:
+                    column;
             }
 
 
-            .summary-cards {
+            .summary-grid,
+            .prediction-summary,
+            .forecast-summary,
+            .intelligence-grid {
 
                 grid-template-columns:
                     1fr;
+            }
 
+
+            .prediction-form {
+
+                display: block;
+            }
+
+
+            .predict-button {
+
+                width: 100%;
+
+                margin-top: 12px;
+            }
+
+
+            .container {
+
+                width: 92%;
+
+                padding-top: 20px;
             }
 
         }
@@ -541,149 +845,95 @@
 <body>
 
 
-<div class="dashboard-container">
+<div class="container">
 
 
-    <!-- HEADER -->
+    <!-- ==================================
+         HEADER
+    =================================== -->
 
-    <div class="dashboard-header">
+    <div class="header">
 
         <div>
 
             <h1>
-                {{ class_name }}
+                AttendAI Dashboard
             </h1>
 
             <p>
-                Staff Attendance Intelligence Dashboard
+                Staff Portal • Class:
+                <strong>
+                    {{ class_name }}
+                </strong>
             </p>
 
         </div>
 
 
-        <a href="/"
-           class="back-button">
-
-            ← Home
-
+        <a
+            href="/staff"
+            class="home-btn"
+        >
+            ← Staff Portal
         </a>
 
     </div>
 
 
+    <!-- ==================================
+         SUMMARY
+    =================================== -->
 
-    <!-- SUMMARY -->
-
-    <div class="summary-cards">
-
-        <div class="summary-card">
-
-            <p>Total Students</p>
-
-            <h2>{{ total_students }}</h2>
-
-        </div>
+    <div class="summary-grid">
 
 
-        <div class="summary-card">
+        <div class="card">
 
-            <p>Average Attendance</p>
-
-            <h2>{{ average_attendance }}%</h2>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <p>Safe Students</p>
-
-            <h2>{{ safe_students }}</h2>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <p>At-Risk Students</p>
-
-            <h2>{{ risk_students }}</h2>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- CLASS INSIGHTS -->
-
-    <h2 class="section-title">
-
-        Class Intelligence Insights
-
-    </h2>
-
-
-    <div class="insights-grid">
-
-
-        <!-- HIGHEST ATTENDANCE -->
-
-        <div class="insight-card">
-
-            <div class="insight-label">
-
-                🏆 Highest Attendance
-
+            <div class="card-label">
+                Total Students
             </div>
 
-
-            <div class="insight-value">
-
-                {{ highest_attendance }}%
-
+            <div class="card-value">
+                {{ total_students }}
             </div>
 
         </div>
 
 
+        <div class="card">
 
-        <!-- LOWEST ATTENDANCE -->
-
-        <div class="insight-card">
-
-            <div class="insight-label">
-
-                📉 Lowest Attendance
-
+            <div class="card-label">
+                Average Attendance
             </div>
 
-
-            <div class="insight-value">
-
-                {{ lowest_attendance }}%
-
+            <div class="card-value">
+                {{ average_attendance }}%
             </div>
 
         </div>
 
 
+        <div class="card">
 
-        <!-- CLASS HEALTH -->
-
-        <div class="insight-card">
-
-            <div class="insight-label">
-
-                🧠 Class Health: {{ health_status }}
-
+            <div class="card-label">
+                Safe Students
             </div>
 
+            <div class="card-value">
+                {{ safe_students }}
+            </div>
 
-            <div class="health-text">
+        </div>
 
-                {{ class_health }}
 
+        <div class="card">
+
+            <div class="card-label">
+                At-Risk Students
+            </div>
+
+            <div class="card-value">
+                {{ risk_students }}
             </div>
 
         </div>
@@ -692,216 +942,783 @@
     </div>
 
 
+    <!-- ==================================
+         CLASS INTELLIGENCE
+    =================================== -->
 
-    <!-- ANALYTICS -->
+    <div class="section">
 
-    <h2 class="section-title">
-
-        Attendance Analytics
-
-    </h2>
-
-
-    <div class="charts-grid">
+        <h2 class="section-title">
+            Class Intelligence
+        </h2>
 
 
-        <div class="chart-card">
-
-            <h3>
-
-                Attendance Distribution
-
-            </h3>
+        <div class="intelligence-grid">
 
 
-            <div class="chart-wrapper">
+            <div class="intelligence-card">
 
-                <canvas id="attendanceChart"></canvas>
+                <h3>
+                    🏆 Highest Attendance
+                </h3>
+
+                <div class="big-number">
+                    {{ highest_attendance }}%
+                </div>
 
             </div>
 
-        </div>
 
+            <div class="intelligence-card">
 
+                <h3>
+                    📉 Lowest Attendance
+                </h3>
 
-        <div class="chart-card">
-
-            <h3>
-
-                Student Risk Distribution
-
-            </h3>
-
-
-            <div class="chart-wrapper">
-
-                <canvas id="riskChart"></canvas>
+                <div class="big-number">
+                    {{ lowest_attendance }}%
+                </div>
 
             </div>
 
-        </div>
 
+            <div class="intelligence-card">
+
+                <h3>
+                    🧠 Class Health
+                </h3>
+
+                <p>
+                    <strong>
+                        {{ health_status }}
+                    </strong>
+
+                    <br><br>
+
+                    {{ class_health }}
+                </p>
+
+            </div>
+
+
+        </div>
 
     </div>
 
 
+    <!-- ==================================
+         NEW AI LEAVE PREDICTION
+    =================================== -->
 
-    <!-- STUDENT RECORDS -->
-
-    <h2 class="section-title">
-
-        Student Records
-
-    </h2>
+    <div class="section">
 
 
-    <div class="staff-search-box">
+        <div class="ai-box">
+
+
+            <div class="ai-title">
+
+                <div class="ai-title-icon">
+                    🤖
+                </div>
+
+                <h2>
+                    AI Leave Prediction
+                </h2>
+
+            </div>
+
+
+            <p class="ai-description">
+
+                Select an upcoming date and AttendAI will
+                analyse previous daily attendance behaviour
+                for all students and predict likely absentees.
+
+            </p>
+
+
+            <form
+                method="GET"
+                action="/staff/dashboard"
+                class="prediction-form"
+            >
+
+
+                <input
+                    type="hidden"
+                    name="class_name"
+                    value="{{ class_name }}"
+                >
+
+
+                <div class="date-area">
+
+                    <label
+                        for="prediction_date"
+                    >
+                        Prediction Date
+                    </label>
+
+
+                    <!--
+                        Native browser calendar.
+                        Clicking this field opens
+                        the small calendar.
+                    -->
+
+                    <input
+                        type="date"
+                        id="prediction_date"
+                        name="prediction_date"
+                        class="date-input"
+                        value="{{ request.args.get('prediction_date', '') }}"
+                        min="{{ latest_log_date }}"
+                        max="2026-11-28"
+                        required
+                    >
+
+
+                    <div class="date-help">
+                        Click the date field to open the calendar.
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="predict-button"
+                >
+                    🔮 Predict Absentees
+                </button>
+
+
+            </form>
+
+
+            {% if prediction_error %}
+
+                <div class="error">
+                    {{ prediction_error }}
+                </div>
+
+            {% endif %}
+
+
+            {% if selected_date_prediction %}
+
+
+                <!-- PREDICTION SUMMARY -->
+
+                <div class="prediction-summary">
+
+
+                    <div class="prediction-card">
+
+                        <div class="prediction-card-label">
+                            Prediction Date
+                        </div>
+
+                        <div class="prediction-card-value">
+                            {{ selected_date_prediction.prediction_date }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-card">
+
+                        <div class="prediction-card-label">
+                            Students Checked
+                        </div>
+
+                        <div class="prediction-card-value">
+                            {{ selected_date_prediction.students_checked }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-card">
+
+                        <div class="prediction-card-label">
+                            Predicted Leave
+                        </div>
+
+                        <div class="prediction-card-value">
+                            {{ selected_date_prediction.predicted_leave }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="prediction-card">
+
+                        <div class="prediction-card-label">
+                            Predicted Present
+                        </div>
+
+                        <div class="prediction-card-value">
+                            {{ selected_date_prediction.predicted_present }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- PREDICTION TABLE -->
+
+                <div class="table-box">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Roll No
+                                </th>
+
+                                <th>
+                                    Prediction
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                        {% for student in selected_date_prediction.results %}
+
+                            <tr>
+
+                                <td>
+                                    {{ student.roll_no }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if student.prediction == "YES" %}
+
+                                        <span class="yes">
+                                            YES
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="no">
+                                            NO
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- ROLL NUMBERS -->
+
+                <div class="roll-box">
+
+                    <h3>
+                        Predicted Leave — Roll Numbers Only
+                    </h3>
+
+
+                    {% if selected_date_prediction.leave_roll_numbers %}
+
+
+                        <div class="roll-list">
+
+
+                        {% for roll_no in selected_date_prediction.leave_roll_numbers %}
+
+                            <span class="roll">
+                                {{ roll_no }}
+                            </span>
+
+                        {% endfor %}
+
+
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="no-result">
+                            No students are predicted to take leave.
+                        </div>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================
+         EXISTING AI FORECAST
+    =================================== -->
+
+    <div class="section">
+
+
+        <h2 class="section-title">
+            🤖 AI Future Absence Prediction
+        </h2>
+
+
+        <div class="forecast-box">
+
+
+            {% if ai_forecast.available %}
+
+
+                <h2 class="forecast-title">
+                    Roll-Call Prediction Engine
+                </h2>
+
+
+                <p class="forecast-description">
+
+                    The existing AttendAI AI model learns from
+                    historical P1–P7 attendance data and forecasts
+                    future absence behaviour.
+
+                </p>
+
+
+                <div class="forecast-summary">
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Model Accuracy
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.accuracy }}%
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Latest Attendance
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.latest_log_date }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Future Dates
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.future_dates }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Expected Absences
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.expected_absences }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    class="forecast-summary"
+                    style="margin-top:14px;"
+                >
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Projected Below 75%
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.projected_below_75 }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Projected Below 85%
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.projected_below_85 }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Projected Below 90%
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.projected_below_90 }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="forecast-card">
+
+                        <div class="forecast-card-label">
+                            Projected Class Attendance
+                        </div>
+
+                        <div class="forecast-card-value">
+                            {{ ai_forecast.class_projected_attendance }}%
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                {% if ai_forecast.student_forecasts %}
+
+
+                    <h3
+                        style="
+                            margin:
+                            25px 0 12px;
+                        "
+                    >
+                        Student Forecasts
+                    </h3>
+
+
+                    <div class="forecast-table">
+
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Register No
+                                    </th>
+
+                                    <th>
+                                        Student Name
+                                    </th>
+
+                                    <th>
+                                        Expected Absences
+                                    </th>
+
+                                    <th>
+                                        Highest Probability
+                                    </th>
+
+                                    <th>
+                                        Projected Attendance
+                                    </th>
+
+                                    <th>
+                                        Risk
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                            {% for student in ai_forecast.student_forecasts %}
+
+
+                                <tr>
+
+                                    <td>
+                                        {{ student.register_no }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ student.student_name }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ student.expected_absences }}
+                                    </td>
+
+
+                                    <td>
+                                        {{ student.highest_probability }}%
+                                    </td>
+
+
+                                    <td>
+                                        {{ student.projected_attendance }}%
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if student.risk == "High" or student.risk == "Critical" %}
+
+                                            <span class="risk-high">
+                                                {{ student.risk }}
+                                            </span>
+
+                                        {% elif student.risk == "Medium" %}
+
+                                            <span class="risk-medium">
+                                                {{ student.risk }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="risk-low">
+                                                {{ student.risk }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            {% endfor %}
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+            {% else %}
+
+
+                <div class="error">
+
+                    AI Future Absence Prediction is unavailable.
+
+                    <br><br>
+
+                    {{ ai_forecast.message }}
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================
+         STUDENT RECORDS
+    =================================== -->
+
+    <div class="section">
+
+
+        <h2 class="section-title">
+            Student Records
+        </h2>
+
 
         <input
-
             type="text"
-
             id="studentSearch"
-
-            placeholder=
-            "Search by Register Number or Student Name..."
-
-            onkeyup=
-            "searchStudents()"
-
+            class="search"
+            placeholder="Search by register number or student name..."
         >
 
-    </div>
+
+        <div class="table-box">
 
 
-
-    <!-- TABLE -->
-
-    <div class="table-container">
-
-        <table id="studentTable">
+            <table id="studentTable">
 
 
-            <thead>
+                <thead>
 
-                <tr>
+                    <tr>
 
-                    <th>Register Number</th>
+                        <th>
+                            Register No
+                        </th>
 
-                    <th>Student Name</th>
+                        <th>
+                            Student Name
+                        </th>
 
-                    <th>Overall %</th>
+                        <th>
+                            Attendance
+                        </th>
 
-                    <th>Theory %</th>
+                        <th>
+                            Theory
+                        </th>
 
-                    <th>Lab %</th>
+                        <th>
+                            Lab
+                        </th>
 
-                    <th>Safe Skips</th>
+                        <th>
+                            Risk
+                        </th>
 
-                    <th>Risk Status</th>
+                        <th>
+                            Profile
+                        </th>
 
-                    <th>Profile</th>
+                    </tr>
 
-                </tr>
-
-            </thead>
+                </thead>
 
 
-            <tbody>
+                <tbody>
 
 
                 {% for student in students %}
 
 
-                <tr>
+                    <tr>
+
+                        <td>
+                            {{ student["Register No"] }}
+                        </td>
 
 
-                    <td>
-                        {{ student['Register No'] }}
-                    </td>
+                        <td>
+                            {{ student["Student Name"] }}
+                        </td>
 
 
-                    <td>
-
-                        <a
-                            class="student-name"
-                            href="/student/{{ student['Register No'] }}"
-                        >
-
-                            {{ student['Student Name'] }}
-
-                        </a>
-
-                    </td>
+                        <td>
+                            {{ student["Overall Attendance %"] }}%
+                        </td>
 
 
-                    <td>
-                        {{ student['Overall Attendance %'] }}%
-                    </td>
+                        <td>
+                            {{ student["Theory %"] }}%
+                        </td>
 
 
-                    <td>
-                        {{ student['Theory %'] }}%
-                    </td>
+                        <td>
+                            {{ student["Lab %"] }}%
+                        </td>
 
 
-                    <td>
-                        {{ student['Lab %'] }}%
-                    </td>
+                        <td>
+
+                            {% if student["Risk Tier"]|lower == "safe" %}
+
+                                <span class="risk-low">
+                                    Safe
+                                </span>
+
+                            {% else %}
+
+                                <span class="risk-high">
+                                    {{ student["Risk Tier"] }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
 
 
-                    <td>
-                        {{ student['Safe Skips'] }}
-                    </td>
+                        <td>
+
+                            <a
+                                href="/student/{{ student['Register No'] }}"
+                                class="profile"
+                            >
+                                View
+                            </a>
+
+                        </td>
 
 
-                    <td>
-
-                        {% if student['Risk Tier']|lower == 'safe' %}
-
-                            <span class="status-safe">
-
-                                {{ student['Risk Tier'] }}
-
-                            </span>
-
-                        {% else %}
-
-                            <span class="status-risk">
-
-                                {{ student['Risk Tier'] }}
-
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-
-                    <td>
-
-                        <a
-                            class="view-button"
-                            href="/student/{{ student['Register No'] }}"
-                        >
-
-                            View
-
-                        </a>
-
-                    </td>
-
-
-                </tr>
+                    </tr>
 
 
                 {% endfor %}
 
 
-            </tbody>
+                </tbody>
+
+            </table>
 
 
-        </table>
+        </div>
 
     </div>
 
@@ -909,288 +1726,59 @@
 </div>
 
 
-
 <script>
 
-
-/* ATTENDANCE DISTRIBUTION */
-
-new Chart(
-
-    document.getElementById(
-        "attendanceChart"
-    ),
-
-    {
-
-        type: "bar",
-
-        data: {
-
-            labels: [
-
-                "Below 75%",
-
-                "75% - 84%",
-
-                "85% - 89%",
-
-                "90% and Above"
-
-            ],
-
-            datasets: [
-
-                {
-
-                    label:
-                        "Students",
-
-                    data: [
-
-                        {{ below_75 }},
-
-                        {{ between_75_84 }},
-
-                        {{ between_85_89 }},
-
-                        {{ above_90 }}
-
-                    ],
-
-                    backgroundColor: [
-
-                        "#ff6b6b",
-
-                        "#ffb45b",
-
-                        "#7fb3ff",
-
-                        "#46d6c5"
-
-                    ],
-
-                    borderRadius: 8
-
-                }
-
-            ]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-                legend: {
-
-                    display: false
-
-                }
-
-            },
-
-            scales: {
-
-                y: {
-
-                    beginAtZero: true,
-
-                    ticks: {
-
-                        color: "#aab9c4"
-
-                    },
-
-                    grid: {
-
-                        color: "#294353"
-
-                    }
-
-                },
-
-                x: {
-
-                    ticks: {
-
-                        color: "#aab9c4"
-
-                    },
-
-                    grid: {
-
-                        color: "transparent"
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-);
-
-
-
-/* RISK DISTRIBUTION */
-
-new Chart(
-
-    document.getElementById(
-        "riskChart"
-    ),
-
-    {
-
-        type: "doughnut",
-
-        data: {
-
-            labels: [
-
-                "Safe",
-
-                "At Risk"
-
-            ],
-
-            datasets: [
-
-                {
-
-                    data: [
-
-                        {{ safe_students }},
-
-                        {{ risk_students }}
-
-                    ],
-
-                    backgroundColor: [
-
-                        "#46d6c5",
-
-                        "#ffb45b"
-
-                    ],
-
-                    borderWidth: 0
-
-                }
-
-            ]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            cutout: "68%",
-
-            plugins: {
-
-                legend: {
-
-                    position: "bottom",
-
-                    labels: {
-
-                        color: "#eaf2f7"
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-);
-
-
-
-/* STUDENT SEARCH */
-
-function searchStudents() {
-
-    let input =
-
-        document
-        .getElementById(
+    /*
+     * Simple student search.
+     * This does not control the dashboard layout.
+     */
+
+    const searchBox =
+        document.getElementById(
             "studentSearch"
-        )
-        .value
-        .toLowerCase();
-
-
-    let table =
-
-        document
-        .getElementById(
-            "studentTable"
         );
 
 
-    let rows =
+    if (searchBox) {
 
-        table
-        .getElementsByTagName(
-            "tr"
+        searchBox.addEventListener(
+            "input",
+            function () {
+
+                const searchText =
+                    this.value
+                    .toLowerCase()
+                    .trim();
+
+
+                const rows =
+                    document.querySelectorAll(
+                        "#studentTable tbody tr"
+                    );
+
+
+                rows.forEach(
+                    function(row) {
+
+                        const text =
+                            row.textContent
+                            .toLowerCase();
+
+
+                        row.style.display =
+                            text.includes(
+                                searchText
+                            )
+                            ? ""
+                            : "none";
+
+                    }
+                );
+
+            }
         );
-
-
-    for (
-
-        let i = 1;
-
-        i < rows.length;
-
-        i++
-
-    ) {
-
-        let text =
-
-            rows[i]
-            .innerText
-            .toLowerCase();
-
-
-        if (
-
-            text.includes(
-                input
-            )
-
-        ) {
-
-            rows[i].style.display = "";
-
-        }
-
-        else {
-
-            rows[i].style.display = "none";
-
-        }
 
     }
-
-}
-
 
 </script>
 
